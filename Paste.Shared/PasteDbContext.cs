@@ -9,13 +9,13 @@ namespace Paste.Shared
         private readonly string _basePath;
 
         public PasteDbContext() 
-            => _basePath = "/app/data";
+            => _basePath = MagicValues.DefaultBasePath;
 
         public PasteDbContext(IConfiguration config) 
-            => _basePath = config["BasePath"] ?? "/app/data";
+            => _basePath = config["BasePath"] ?? MagicValues.DefaultBasePath;
 
         public PasteDbContext(DbContextOptions<PasteDbContext> contextOptions, IConfiguration config) : base(contextOptions) 
-            => _basePath = config["BasePath"] ?? "/app/data";
+            => _basePath = config["BasePath"] ?? MagicValues.DefaultBasePath;
 
         public virtual DbSet<Upload> Uploads { get; set; }
 

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Paste.Shared;
 
 namespace Paste.Shared.Migrations
 {
     [DbContext(typeof(PasteDbContext))]
-    partial class PasteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190116235600_AddDateAndUsageStats")]
+    partial class AddDateAndUsageStats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

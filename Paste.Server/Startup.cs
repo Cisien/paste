@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,7 +49,7 @@ namespace Paste.Server
                 DefaultContentType = MediaTypeNames.Application.Octet,
                 ServeUnknownFileTypes = false,
                 OnPrepareResponse = contentTypeProvider.SetDisposition,
-                FileProvider = new PhysicalFileProvider(config["BasePath"] ?? "/app/data"),
+                FileProvider = new PhysicalFileProvider(config["BasePath"] ?? MagicValues.DefaultBasePath),
                 RequestPath = "/f"
             });
 

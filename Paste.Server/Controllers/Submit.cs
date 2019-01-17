@@ -27,12 +27,12 @@ namespace Paste.Server.Controllers
         [RequestSizeLimit(100_000_000_000)]
         public async Task<ActionResult<SubmitResponse>> Post(List<IFormFile> files)
         {
-            if((files?.Count ?? 0) > 1)
+            if((files?.Count ?? 100) > 1)
             {
                 return BadRequest();
             }
 
-            var file = files?.FirstOrDefault();
+            var file = files.FirstOrDefault();
             var filename = GetRandomFileNameWithoutExt();
             var filePath = Path.Combine(_basePath, filename);
             await SaveFile(file, filePath);
@@ -42,6 +42,7 @@ namespace Paste.Server.Controllers
                 Id = filename,
                 Name = file.FileName,
                 ContentType = file.ContentType,
+                Timestamp = DateTimeOffset.UtcNow,
             };
 
             await _db.Uploads.AddAsync(upload);
