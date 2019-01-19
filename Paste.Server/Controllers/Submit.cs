@@ -49,7 +49,8 @@ namespace Paste.Server.Controllers
             await _db.SaveChangesAsync();
 
             var baseUrl = $"{Request.Scheme}://{Request.Host}/";
-            return Ok(new SubmitResponse { Url = string.Concat(baseUrl, "f/", filename) });
+            var ext = Path.GetExtension(file.FileName);
+            return Ok(new SubmitResponse { Url = string.Concat(baseUrl, "f/", filename, ext) });
         }
 
         private async Task SaveFile(IFormFile file, string filename)

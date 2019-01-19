@@ -16,7 +16,7 @@ namespace Paste.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+            
             services.AddResponseCompression(options =>
             {
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
@@ -42,6 +42,18 @@ namespace Paste.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseWhen(ctx => ctx.Request.Path.Value.Contains("/f"), whenApp => {
+                whenApp.Use((ctx, next) =>
+                {
+                    var path = ctx.Request.Path.Value;
+                    if (path.Contains("."))
+                    {
+                        ctx.Request.Path = path.Substring(0, path.LastIndexOf('.'));
+                    }
+                    return next();
+                });
+            });
 
             app.UseStaticFiles(new StaticFileOptions
             {
