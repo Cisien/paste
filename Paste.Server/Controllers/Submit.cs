@@ -48,7 +48,7 @@ namespace Paste.Server.Controllers
             await _db.Uploads.AddAsync(upload);
             await _db.SaveChangesAsync();
 
-            var baseUrl = $"{Request.Scheme}://{Request.Host}/";
+            var baseUrl = $"https://{Request.Host}/";
             var ext = Path.GetExtension(file.FileName);
             return Ok(new SubmitResponse { Url = string.Concat(baseUrl, "f/", filename, ext) });
         }
