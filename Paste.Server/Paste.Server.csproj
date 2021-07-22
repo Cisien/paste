@@ -1,14 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <LangVersion>7.3</LangVersion>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <TargetFramework>net6.0</TargetFramework>
+      <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Paste.Shared\Paste.Shared.csproj" />

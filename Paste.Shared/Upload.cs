@@ -12,5 +12,6 @@ namespace Paste.Shared
         public DateTimeOffset Timestamp { get; set; }
         public int Views { get; set; }
         public DateTimeOffset LastViewed { get; set; }
+        public virtual ApiToken Owner { get; set; }
     }
 }

@@ -1,73 +1,43 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Paste.Shared;
-using System.Linq;
-using System.Net.Mime;
 
 namespace Paste.Server
 {
+
     public class Startup
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            
-            services.AddResponseCompression(options =>
-            {
-                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                {
-                    MediaTypeNames.Application.Octet,
-                });
-            });
-
+            services.AddControllers();
             services.AddDbContext<PasteDbContext>();
-            services.AddSingleton<DbContentTypeProvider, DbContentTypeProvider>();
-            
-            using (var db = services.BuildServiceProvider().GetService<PasteDbContext>())
-            {
-                db.Database.Migrate();
-            }
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddAuthentication("token").AddScheme<AuthenticationSchemeOptions, TokenAuthHandler>("token", "token", o => { });
         }
-        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration config, DbContentTypeProvider contentTypeProvider)
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, PasteDbContext db, ITokenService tokenService)
         {
-            app.UseResponseCompression();
+            db.Database.Migrate();
+            tokenService.EnsureAdminTokenExists();
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseWhen(ctx => ctx.Request.Path.Value.Contains("/f"), whenApp => {
-                whenApp.Use((ctx, next) =>
-                {
-                    var path = ctx.Request.Path.Value;
-                    if (path.Contains("."))
-                    {
-                        ctx.Request.Path = path.Substring(0, path.LastIndexOf('.'));
-                    }
-                    return next();
-                });
-            });
+            app.UseRouting();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                ContentTypeProvider = contentTypeProvider,
-                DefaultContentType = MediaTypeNames.Application.Octet,
-                ServeUnknownFileTypes = false,
-                OnPrepareResponse = contentTypeProvider.SetDisposition,
-                FileProvider = new PhysicalFileProvider(config["BasePath"] ?? MagicValues.DefaultBasePath),
-                RequestPath = "/f"
-            });
 
-            app.UseMvc(routes =>
+            app.UseAuthentication().UseAuthorization();
+
+            app.UseAuthentication();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }

@@ -1,8 +1,8 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/dotnet:2.2-sdk AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Paste.Server/Paste.Server.csproj", "Paste.Server/"]
 COPY ["Paste.Shared/Paste.Shared.csproj", "Paste.Shared/"]

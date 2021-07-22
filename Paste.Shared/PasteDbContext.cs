@@ -19,6 +19,8 @@ namespace Paste.Shared
 
         public virtual DbSet<Upload> Uploads { get; set; }
 
+        public virtual DbSet<ApiToken> Tokens { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if(!Directory.Exists(_basePath))
