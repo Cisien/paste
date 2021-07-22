@@ -34,15 +34,6 @@ jobs:
           version: latest
           install: true
 
-      - name: Run Tests
-        uses: docker/build-push-action@v2.6.1
-        with:
-          context: .
-          target: dotnet-test
-          push: false
-          cache-to: type=gha, scope=${{github.repository}}
-          cache-from: type=gha, scope=${{github.repository}}
-
       - name: Extract Docker metadata for main build
         id: meta
         uses: docker/metadata-action@v3.4.1
