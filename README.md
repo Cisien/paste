@@ -1,3 +1,6 @@
+[![build](https://github.com/Cisien/paste/actions/workflows/main.yml/badge.svg)](https://github.com/Cisien/paste/actions/workflows/main.yml)
+
+### Setup Instructions
 First, run the container in interactive mode. The first token will be generated and printed in stdout. Copy this down as it's only displayed once.
 
 ```sh
