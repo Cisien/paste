@@ -21,7 +21,7 @@ namespace Paste.Server.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = nameof(Permissions.TokensAdmin))]
+        [Authorize(Roles = nameof(Permissions.TokensAdmin) +","+ nameof(Permissions.Administrator))]
         public async Task<ActionResult<TokenResponse>> CreateToken(TokenCreateRequest request)
         {
             var callerTokenClaim = User.FindFirst(ClaimTypes.Actor);
@@ -47,7 +47,7 @@ namespace Paste.Server.Controllers
         }
 
         [HttpPut("[action]")]
-        [Authorize(Roles = nameof(Permissions.TokensAdmin))]
+        [Authorize(Roles = nameof(Permissions.TokensAdmin) + "," + nameof(Permissions.Administrator))]
         public async Task<ActionResult<TokenResponse>> UpdateToken(TokenUpdateRequest request)
         {
             var callerTokenClaim = User.FindFirst(ClaimTypes.Actor);
@@ -73,7 +73,7 @@ namespace Paste.Server.Controllers
         }
 
         [HttpDelete("[action]")]
-        [Authorize(Roles = nameof(Permissions.TokensAdmin))]
+        [Authorize(Roles = nameof(Permissions.TokensAdmin) + "," + nameof(Permissions.Administrator))]
         public async Task<ActionResult<TokenResponse>> DeleteToken(int id)
         {
             var callerTokenClaim = User.FindFirst(ClaimTypes.Actor);
