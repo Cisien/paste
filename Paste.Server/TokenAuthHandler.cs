@@ -30,7 +30,7 @@ namespace Paste.Server
                 }
                 else
                 {
-                    Logger.LogWarning("Auth header or authToken url parameter does not exist");
+                    Logger.LogInformation("Auth header or authToken url parameter does not exist");
                     return AuthenticateResult.Fail("Auth token missing");
                 }
             }
@@ -43,21 +43,21 @@ namespace Paste.Server
                 }
                 catch(Exception ex)
                 {
-                    Logger.LogWarning(ex, "Auth header exists, but the token couldn't be parsed");
+                    Logger.LogInformation(ex, "Auth header exists, but the token couldn't be parsed");
                     return AuthenticateResult.Fail("Invalid token");
                 }
             }
 
             if(string.IsNullOrWhiteSpace(token))
             {
-                Logger.LogWarning("Auth header or query string parameter exists, but did not contain a token.");
+                Logger.LogInformation("Auth header or query string parameter exists, but did not contain a token.");
                 return AuthenticateResult.Fail("Invalid Token");
             }
             
             var validToken = await _tokenSvc.GetTokenAsync(token);
             if (validToken == null)
             {
-                Logger.LogWarning("The authentication token provided by the user was not found.");
+                Logger.LogInformation("The authentication token provided by the user was not found.");
                 return AuthenticateResult.Fail("Token not found");
             }
 
