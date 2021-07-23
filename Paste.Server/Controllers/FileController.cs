@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Paste.Server.Models;
 using Paste.Shared;
 using System;
 using System.IO;
@@ -65,6 +67,39 @@ namespace Paste.Server.Controllers
             Response.Headers.Add("Content-Disposition", $"{method}; filename=\"{upload.Name}\"");
 
             return File(IOFile.OpenRead(path), upload.ContentType);
+        }
+
+        [HttpGet("{owner}/{filename}.{extension}/meta")]
+        [HttpGet("{owner}/{filename}/meta")]
+        [HttpGet("{filename}.{extension}/meta")]
+        [HttpGet("{filename}/meta")]
+        public async Task<IActionResult> GetMeta(string? owner, string filename)
+        {
+            var safePath = ValidatePath(owner, filename);
+            if (!safePath)
+            {
+                return NotFound();
+            }
+            owner = owner == null ? null : HttpUtility.UrlDecode(owner);
+
+            var dbId = owner == null ? filename : $"{owner}/{filename}";
+            var upload = await _db.Uploads.Include(a => a.Owner).SingleOrDefaultAsync(a => a.Id == dbId);
+
+            if (upload == null)
+            {
+                return NotFound();
+            }
+
+            string path = BuildFilePath(owner, filename);
+            if(!IOFile.Exists(path))
+            {
+                return NotFound();
+            }
+
+            var fileInfo = new FileInfo(path);
+            var sizeKb = fileInfo.Length / 1024;
+
+            return Ok(new UploadMetaResponse(upload.Id, upload.Name, sizeKb, upload.ContentType, upload.Owner.Name, upload.Views, upload.LastViewed, upload.Timestamp));
         }
 
         private string BuildFilePath(string? owner, string filename)
