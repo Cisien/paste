@@ -25,9 +25,9 @@ namespace Paste.Server
             if (!anyAdminTokens)
             {
                 var newToken = CreateTokenAsync(null, "Default Administrator", Permissions.Administrator).ConfigureAwait(false).GetAwaiter().GetResult();
-                _logger.LogInformation($"=====================Default Administrator Token=====================");
-                _logger.LogInformation($"Default administrator token created. Save this token safely, it will only be displayed once! {newToken.Token}");
-                _logger.LogInformation($"=====================================================================");
+                _logger.LogCritical($"=====================Default Administrator Token=====================");
+                _logger.LogCritical($"Default administrator token created. Save this token safely, it will only be displayed once! {newToken.Token}");
+                _logger.LogCritical($"=====================================================================");
             }
         }
 
