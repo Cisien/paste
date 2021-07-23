@@ -26,7 +26,7 @@ namespace Paste.Server
                         o.SingleLine = context.HostingEnvironment.IsProduction();
                         o.ColorBehavior = context.HostingEnvironment.IsProduction() ? LoggerColorBehavior.Disabled : LoggerColorBehavior.Enabled;
                         o.UseUtcTimestamp = context.HostingEnvironment.IsProduction();
-                        o.TimestampFormat = "o";
+                        o.TimestampFormat = "yyyy-MM-ddTHH:mm:sszzz ";
                     });
 
                     if (context.HostingEnvironment.IsDevelopment())
